@@ -1,14 +1,11 @@
 <script lang="ts">
-  import type { Player } from './types';
+  import type { Player } from '../types';
   import Autocomplete from '@smui-extra/autocomplete';
   import { Text } from '@smui/list';
   import CircularProgress from '@smui/circular-progress';
-  import { getPlayers } from './mockApi/mockApi';
+
   export let selectedPlayer: Player | undefined = undefined;
-
-  let allPlayers: Player[] | undefined;
-
-  getPlayers().then((plrs) => (allPlayers = plrs));
+  export let allPlayers: Player[];
 
   function getOptionLabel(player?: Player): string {
     if (!player) return '';

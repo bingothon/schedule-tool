@@ -10,6 +10,9 @@ export const getRandomPlayer = (): Player => {
   return {
     id: Math.floor(Math.random() * 10000),
     name: getRandomString(8),
-    twitch: getRandomString(10)
+    twitch: getRandomString(10),
+    country: null,
+    discord: null,
+    pronouns: null
   };
 };

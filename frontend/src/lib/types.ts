@@ -1,10 +1,10 @@
 export interface Player {
   id: number;
   name: string;
-  twitch?: string;
-  pronouns?: string;
-  country?: string;
-  discord?: string;
+  twitch: string | null;
+  pronouns: string | null;
+  country: string | null;
+  discord: string | null;
 }
 
 export type CreatePlayer = Omit<Player, 'id'>;

@@ -3,9 +3,8 @@
 </script>
 
 <script lang="ts">
-  import PlayerCreate from '$lib/PlayerCreate.svelte';
-  import PlayerSelect from '$lib/PlayerSelect.svelte';
-  import PlayerSelectCreate from '$lib/PlayerSelectCreate.svelte';
+  import PlayerSelectCreate from '$lib/player/PlayerSelectCreate.svelte';
+  import TeamStuff from '$lib/player/TeamStuff.svelte';
 </script>
 
 <svelte:head>
@@ -18,6 +17,7 @@
   <h2>Content</h2>
 
   <PlayerSelectCreate />
+  <TeamStuff />
 </section>
 
 <style>

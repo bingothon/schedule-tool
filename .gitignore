@@ -9,3 +9,13 @@ package
 .vercel
 .output
 frontend/static/smui.css
+
+.vscode
+
+# next.js
+.next/
+out/
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts

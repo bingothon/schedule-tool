@@ -12,3 +12,60 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id           String  @id @unique @default(cuid())
+  discordId    String  @unique
+  refreshToken String?
+  restreams    Match[]
+}
+
+model Player {
+  id          String  @id @unique @default(cuid())
+  displayName String
+  twitchName  String  @unique
+  pronouns    String
+  country     String
+  teams       Team[]  @relation("TeamPlayers")
+  matches     Match[] @relation("MatchPlayers")
+}
+
+model Team {
+  id      String   @id @unique @default(cuid())
+  name    String
+  players Player[] @relation("TeamPlayers")
+  matches Match[]  @relation("MatchTeams")
+}
+
+model Event {
+  id            String  @id @unique @default(cuid())
+  name          String
+  matches       Match[]
+  matchEstimate String
+}
+
+model Match {
+  id          String      @id @unique @default(cuid())
+  status      Status
+  players     Player[]    @relation("MatchPlayers")
+  teams       Team[]      @relation("MatchTeams")
+  time        DateTime
+  gameTwitch  String
+  aspectRatio AspectRatio
+  restreamer  User        @relation(fields: [userId], references: [id])
+  event       Event       @relation(fields: [eventId], references: [id])
+
+  userId  String
+  eventId String
+}
+
+enum AspectRatio {
+  SIXTEENNINE
+  FOURTHREE
+}
+
+enum Status {
+  UPCOMING
+  ARCHIVED
+  CANCELLED
+}

@@ -16,6 +16,7 @@ export default function MenuBar() {
                     <HeaderLink caption="Bingothon Organizer" href="/" />
                     <Box sx={{ flexGrow: 1 }} />
                     <HeaderLink caption="Calendar" href="/calendar" />
+                    <HeaderLink caption="Events" href="/events" />
                     <HeaderLink caption="Sign Ups" href="/signups" />
                 </Toolbar>
             </AppBar>

@@ -1,3 +1,5 @@
-export default function Page() {
-    return <h1>Hello, Next.js!</h1>;
+import { auth } from '../lib/auth';
+
+export default async function Page() {
+    return <div></div>;
 }

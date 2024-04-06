@@ -7,6 +7,7 @@ import {
     Typography,
 } from '@mui/material';
 import { ExpandMore } from '@mui/icons-material';
+import Link from 'next/link';
 
 export default function EventsPage() {
     return (
@@ -63,7 +64,13 @@ export default function EventsPage() {
                     </Box>
                     <Box sx={{ display: 'flex' }}>
                         <Box sx={{ flexGrow: 1 }} />
-                        <Button sx={{ float: 'right' }}>New Match</Button>
+                        <Button
+                            sx={{ float: 'right' }}
+                            LinkComponent={Link}
+                            href="/matches/new"
+                        >
+                            New Match
+                        </Button>
                     </Box>
                 </AccordionDetails>
             </Accordion>

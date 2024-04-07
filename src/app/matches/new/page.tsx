@@ -1,5 +1,12 @@
 'use client';
-import { Box, Button, Card, CardContent, TextField } from '@mui/material';
+import {
+    Box,
+    Button,
+    Card,
+    CardContent,
+    TextField,
+    Typography,
+} from '@mui/material';
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
@@ -24,12 +31,18 @@ interface Team {
 
 function TeamForm({ index, control, remove }) {
     return (
-        <Box sx={{ border: '1px solid black', padding: 2 }}>
+        <Box
+            sx={{
+                padding: 2,
+                border: '1px solid lightgrey',
+                borderRadius: '12px',
+            }}
+        >
             <Controller
                 name={`teams.${index}.name`}
                 control={control}
                 render={({ field }) => (
-                    <TextField {...field} placeholder="Team Name" />
+                    <TextField {...field} label="Team Name" />
                 )}
             />
             <Card sx={{ marginTop: 2 }}>
@@ -52,24 +65,48 @@ export default function NewMatchPage() {
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <form onSubmit={handleSubmit((values) => console.log(values))}>
-                <Controller
-                    name="date"
-                    control={control}
-                    render={({ field }) => <DateTimePicker {...field} />}
-                />
-                <Box sx={{ display: 'flex' }}>
-                    {teams.map((team, index) => (
-                        <TeamForm
-                            key={team.id}
+                <Card variant="outlined" sx={{ mb: 2 }}>
+                    <CardContent>
+                        <Typography variant="h6" sx={{ pb: 2 }}>
+                            Match Information
+                        </Typography>
+                        <Controller
+                            name="date"
                             control={control}
-                            index={index}
-                            remove={() => remove(index)}
+                            render={({ field }) => (
+                                <DateTimePicker label="Date" {...field} />
+                            )}
                         />
-                    ))}
-                    <Button onClick={() => append({ name: '', players: [] })}>
-                        Add Team
-                    </Button>
-                </Box>
+                    </CardContent>
+                </Card>
+                <Card variant="outlined">
+                    <CardContent>
+                        <Typography variant="h6">Players</Typography>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                columnGap: 2,
+                                flexWrap: 'wrap',
+                            }}
+                        >
+                            {teams.map((team, index) => (
+                                <TeamForm
+                                    key={team.id}
+                                    control={control}
+                                    index={index}
+                                    remove={() => remove(index)}
+                                />
+                            ))}
+                            <Button
+                                onClick={() =>
+                                    append({ name: '', players: [] })
+                                }
+                            >
+                                Add Team
+                            </Button>
+                        </Box>
+                    </CardContent>
+                </Card>
                 <Button type="submit">Submit</Button>
             </form>
         </LocalizationProvider>

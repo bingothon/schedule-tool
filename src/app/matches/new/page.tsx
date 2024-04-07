@@ -29,7 +29,19 @@ interface Team {
     players: Player[];
 }
 
-function PlayerForm({ teamIndex, index, control, remove }) {
+const emptyPlayer: Player = {
+    name: '',
+    twitch: '',
+    pronouns: '',
+    country: '',
+};
+
+const emptyTeam: Team = {
+    name: '',
+    players: [emptyPlayer],
+};
+
+function PlayerForm({ teamIndex, index, control, remove, showRemove }) {
     const prefix = `teams.${teamIndex}.players.${index}`;
     return (
         <Box sx={{ display: 'flex', columnGap: 2 }}>
@@ -55,12 +67,12 @@ function PlayerForm({ teamIndex, index, control, remove }) {
                 control={control}
                 render={({ field }) => <TextField {...field} label="Country" />}
             />
-            <Button onClick={remove}>Remove Player</Button>
+            {showRemove && <Button onClick={remove}>Remove Player</Button>}
         </Box>
     );
 }
 
-function TeamForm({ index, control, remove }) {
+function TeamForm({ index, control, remove, showRemove }) {
     const {
         fields: players,
         append,
@@ -90,36 +102,27 @@ function TeamForm({ index, control, remove }) {
                             teamIndex={index}
                             control={control}
                             remove={() => removePlayer(index)}
+                            showRemove={players.length > 1}
                         />
                     ))}
                 </Box>
-                <Button
-                    onClick={() =>
-                        append({
-                            name: '',
-                            twitch: '',
-                            pronouns: '',
-                            country: '',
-                        })
-                    }
-                >
-                    Add Player
-                </Button>
+                <Button onClick={() => append(emptyPlayer)}>Add Player</Button>
             </Box>
-            <Button onClick={remove}>Remove Team</Button>
+            {showRemove && <Button onClick={remove}>Remove Team</Button>}
         </Box>
     );
 }
 
 export default function NewMatchPage() {
     const { control, handleSubmit } = useForm<FormInput>({
-        defaultValues: { date: dayjs(), teams: [{ name: '', players: [] }] },
+        defaultValues: { date: dayjs(), teams: [emptyTeam] },
     });
     const {
         fields: teams,
         append,
         remove,
     } = useFieldArray({ control, name: 'teams' });
+
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <form onSubmit={handleSubmit((values) => console.log(values))}>
@@ -147,13 +150,10 @@ export default function NewMatchPage() {
                                     control={control}
                                     index={index}
                                     remove={() => remove(index)}
+                                    showRemove={teams.length > 1}
                                 />
                             ))}
-                            <Button
-                                onClick={() =>
-                                    append({ name: '', players: [] })
-                                }
-                            >
+                            <Button onClick={() => append(emptyTeam)}>
                                 Add Team
                             </Button>
                         </Box>

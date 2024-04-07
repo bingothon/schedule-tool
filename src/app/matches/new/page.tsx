@@ -29,7 +29,43 @@ interface Team {
     players: Player[];
 }
 
+function PlayerForm({ teamIndex, index, control, remove }) {
+    const prefix = `teams.${teamIndex}.players.${index}`;
+    return (
+        <Box sx={{ display: 'flex', columnGap: 2 }}>
+            <Controller
+                name={`${prefix}.name`}
+                control={control}
+                render={({ field }) => <TextField {...field} label="Name" />}
+            />
+            <Controller
+                name={`${prefix}.twitch`}
+                control={control}
+                render={({ field }) => <TextField {...field} label="Twitch" />}
+            />
+            <Controller
+                name={`${prefix}.pronouns`}
+                control={control}
+                render={({ field }) => (
+                    <TextField {...field} label="Pronouns" />
+                )}
+            />
+            <Controller
+                name={`${prefix}.country`}
+                control={control}
+                render={({ field }) => <TextField {...field} label="Country" />}
+            />
+            <Button onClick={remove}>Remove Player</Button>
+        </Box>
+    );
+}
+
 function TeamForm({ index, control, remove }) {
+    const {
+        fields: players,
+        append,
+        remove: removePlayer,
+    } = useFieldArray({ control, name: `teams.${index}.players` });
     return (
         <Box
             sx={{
@@ -45,10 +81,32 @@ function TeamForm({ index, control, remove }) {
                     <TextField {...field} label="Team Name" />
                 )}
             />
-            <Card sx={{ marginTop: 2 }}>
-                <CardContent></CardContent>
-            </Card>
-            <Button onClick={remove}>Remove</Button>
+            <Box sx={{ marginTop: 2 }}>
+                <Box display="flex" flexDirection="column" rowGap={2}>
+                    {players.map((player, playerIndex) => (
+                        <PlayerForm
+                            key={player.id}
+                            index={playerIndex}
+                            teamIndex={index}
+                            control={control}
+                            remove={() => removePlayer(index)}
+                        />
+                    ))}
+                </Box>
+                <Button
+                    onClick={() =>
+                        append({
+                            name: '',
+                            twitch: '',
+                            pronouns: '',
+                            country: '',
+                        })
+                    }
+                >
+                    Add Player
+                </Button>
+            </Box>
+            <Button onClick={remove}>Remove Team</Button>
         </Box>
     );
 }
@@ -65,7 +123,7 @@ export default function NewMatchPage() {
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <form onSubmit={handleSubmit((values) => console.log(values))}>
-                <Card variant="outlined" sx={{ mb: 2 }}>
+                <Card elevation={4} sx={{ mb: 2 }}>
                     <CardContent>
                         <Typography variant="h6" sx={{ pb: 2 }}>
                             Match Information
@@ -79,16 +137,10 @@ export default function NewMatchPage() {
                         />
                     </CardContent>
                 </Card>
-                <Card variant="outlined">
+                <Card elevation={4}>
                     <CardContent>
                         <Typography variant="h6">Players</Typography>
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                columnGap: 2,
-                                flexWrap: 'wrap',
-                            }}
-                        >
+                        <Box display="flex" flexDirection="column" rowGap={2}>
                             {teams.map((team, index) => (
                                 <TeamForm
                                     key={team.id}
